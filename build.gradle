@@ -21,6 +21,9 @@ dependencies {
 
 	// PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
 	// You may need to force-disable transitiveness on them.
+	include(
+            modImplementation(group: 'org.xerial', name: 'sqlite-jdbc', version: '3.30.1')
+    )
 }
 
 processResources {

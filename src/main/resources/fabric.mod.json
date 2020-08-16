@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "id": "placementpreview",
+  "id": "heartstone",
   "version": "${version}",
 
-  "name": "Placement Preview",
-  "description": "Foresee what you'll place!",
+  "name": "Heartstone",
+  "description": "Teleport!",
   "authors": [
     "SN2"
   ],
@@ -19,14 +19,13 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "sn2.placementpreview.PlacementPreview"
+      "sn2.heartstone.HeartStone"
     ],
     "client": [
-      "sn2.placementpreview.ClientPlacementPreview"
     ]
   },
   "mixins": [
-    "placementpreview.mixins.json"
+    "heartstone.mixins.json"
   ],
 
   "depends": {

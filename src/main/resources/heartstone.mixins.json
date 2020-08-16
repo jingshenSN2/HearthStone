@@ -1,13 +1,12 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "sn2.placementpreview.mixin",
+  "package": "sn2.heartstone.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
   ],
   "client": [
-	"MixinPlayerEntity";
-	"MixinMinecraftClient"
+	"MixinPlayerEntity"
   ],
   "injectors": {
     "defaultRequire": 1

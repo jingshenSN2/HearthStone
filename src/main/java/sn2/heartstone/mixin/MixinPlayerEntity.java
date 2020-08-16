@@ -1,4 +1,4 @@
-package sn2.placementpreview.mixin;
+package sn2.heartstone.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -9,7 +9,7 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
 import net.minecraft.text.TranslatableText;
-import sn2.placementpreview.PreviewPlayerEntity;
+import sn2.heartstone.PreviewPlayerEntity;
 
 @Mixin(PlayerEntity.class)
 public abstract class MixinPlayerEntity implements PreviewPlayerEntity {

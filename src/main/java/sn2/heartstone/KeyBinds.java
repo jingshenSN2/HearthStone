@@ -1,4 +1,4 @@
-package sn2.placementpreview;
+package sn2.heartstone;
 
 import org.lwjgl.glfw.GLFW;
 
