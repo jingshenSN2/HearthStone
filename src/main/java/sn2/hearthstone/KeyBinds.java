@@ -1,4 +1,4 @@
-package sn2.heartstone;
+package sn2.hearthstone;
 
 import org.lwjgl.glfw.GLFW;
 

@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "id": "heartstone",
+  "id": "hearthstone",
   "version": "${version}",
 
-  "name": "Heartstone",
+  "name": "Hearthstone",
   "description": "Teleport!",
   "authors": [
     "SN2"
@@ -14,18 +14,18 @@
   },
 
   "license": "MIT",
-  "icon": "assets/placementpreview/icon.png",
+  "icon": "assets/hearthstone/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "sn2.heartstone.HeartStone"
+      "sn2.hearthstone.HearthStone"
     ],
     "client": [
     ]
   },
   "mixins": [
-    "heartstone.mixins.json"
+    "hearthstone.mixins.json"
   ],
 
   "depends": {

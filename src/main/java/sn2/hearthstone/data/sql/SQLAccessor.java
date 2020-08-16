@@ -1,4 +1,4 @@
-package sn2.heartstone.data.sql;
+package sn2.hearthstone.data.sql;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

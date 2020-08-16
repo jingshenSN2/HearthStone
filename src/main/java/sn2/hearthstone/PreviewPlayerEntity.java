@@ -1,4 +1,4 @@
-package sn2.heartstone;
+package sn2.hearthstone;
 
 public interface PreviewPlayerEntity {
 	boolean isPreview();

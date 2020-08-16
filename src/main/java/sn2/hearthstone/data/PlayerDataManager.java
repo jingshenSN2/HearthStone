@@ -1,4 +1,4 @@
-package sn2.heartstone.data;
+package sn2.hearthstone.data;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,7 +12,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
-import sn2.heartstone.data.sql.SQLAccessor;
+import sn2.hearthstone.data.sql.SQLAccessor;
 
 public class PlayerDataManager{
 	public MinecraftServer server;
@@ -28,11 +28,11 @@ public class PlayerDataManager{
 		this.posDatas = new HashMap<String, PositionData>();
 		this.sql.connect();
 		this.sql.executeCommand("CREATE TABLE IF NOT EXISTS POSITION " + 
-				"(UUID 		TEXT PRIMARY KEY 	NOT NULL UNIQUE, " +
-				"WORLDKEY 	STRING 				NOT NULL, " +
-				"POSLON 	INTEGER 			NOT NULL, " +
-				"YAW 		FLOAT 				NOT NULL, " +
-				"PITCH 		FLOAT				NOT NULL);");
+				"(UUID 		VARCHAR(50) 	PRIMARY KEY NOT NULL, " +
+				"WORLDKEY 	VARCHAR(50)  				NOT NULL, " +
+				"POSLON 	BIGINT 			NOT NULL, " +
+				"YAW		REAL 				NOT NULL, " +
+				"PITCH 		REAL				NOT NULL);");
 		try {
 			this.loadFromSQL();
 		} catch (SQLException e) {

@@ -1,11 +1,11 @@
-package sn2.heartstone.data;
+package sn2.hearthstone.data;
 
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
-import sn2.heartstone.HeartStone;
+import sn2.hearthstone.HearthStone;
 
 public class PositionData {
 	public String uuid;

@@ -1,4 +1,4 @@
-package sn2.heartstone.data.sql;
+package sn2.hearthstone.data.sql;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -11,27 +11,18 @@ public class SQLite implements SQLAccessor{
 
     private String dbName;
     private String dbPath;
-    private boolean hasPath = false;
     
     private Connection dbConnection;
     private String dbUrl;
     
-    public SQLite(String name) {
-		this.dbName = name;
-	}
-    
     public SQLite(String path, String name) {
 		this.dbName = name;
 		this.dbPath = path;
-		this.hasPath = true;
+		dbUrl = "jdbc:sqlite:" + this.dbPath + "/" + this.dbName + ".db";
 	}
     
 	@Override
 	public void connect() {
-		if (this.hasPath)
-			dbUrl = "jdbc:sqlite:" + this.dbPath + "/" + this.dbName + ".db";
-		else
-			dbUrl = "jdbc:sqlite:" + this.dbName + ".db";
 		try {
 			Class.forName("org.sqlite.JDBC");
 			this.dbConnection = DriverManager.getConnection(dbUrl);
