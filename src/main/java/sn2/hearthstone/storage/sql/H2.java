@@ -1,4 +1,4 @@
-package sn2.hearthstone.data.sql;
+package sn2.hearthstone.storage.sql;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,24 +7,32 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class SQLite implements SQLAccessor{
+public class H2  implements SQLAccessor{
 
     private String dbName;
     private String dbPath;
+    private boolean hasPath = false;
     
     private Connection dbConnection;
     private String dbUrl;
     
-    public SQLite(String path, String name) {
+    public H2(String name) {
+		this.dbName = name;
+	}
+    
+    public H2(String path, String name) {
 		this.dbName = name;
 		this.dbPath = path;
-		dbUrl = "jdbc:sqlite:" + this.dbPath + "/" + this.dbName + ".db";
+		this.hasPath = true;
 	}
     
 	@Override
 	public void connect() {
+		if (this.hasPath)
+			dbUrl = "jdbc:h2:" + this.dbPath + "/" + this.dbName + ".db";
+		else
+			dbUrl = "jdbc:h2:" + this.dbName + ".db";
 		try {
-			Class.forName("org.sqlite.JDBC");
 			this.dbConnection = DriverManager.getConnection(dbUrl);
 		} catch (Exception e) {
 			System.out.println("[SQLITE] An error occurred while connecting.");

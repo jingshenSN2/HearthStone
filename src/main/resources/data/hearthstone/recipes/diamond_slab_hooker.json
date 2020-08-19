@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " FS",
+    " S ",
+    "S  "
+  ],
+  "key": {
+    "F": {
+      "item": "minecraft:diamond"
+    },
+	"S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "slabhelper:diamond_slab_hooker",
+    "count": 1
+  }
+}

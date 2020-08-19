@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " FS",
+    " S ",
+    "S  "
+  ],
+  "key": {
+    "F": {
+      "item": "minecraft:oak_slab"
+    },
+	"S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "slabhelper:wooden_slab_hooker",
+    "count": 1
+  }
+}
