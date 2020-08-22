@@ -7,10 +7,10 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
@@ -26,43 +26,43 @@ import sn2.hearthstone.storage.data.PositionData;
 public class ItemHearthStoneBase extends Item {
 	
 	private int maxCooldown;
-	private int stoneType;
+	protected int cooldown;
+	protected int stoneType;
 	
 	
 	public ItemHearthStoneBase(int maxCooldown, int stoneType) {
 		super(new Settings().maxCount(1).group(ItemGroup.TOOLS));
 		this.maxCooldown = maxCooldown;
+		this.cooldown = 0;
 		this.stoneType = stoneType;
 	}
 	
-	/*
-	 *    protected boolean isInDaylight() {
-      if (this.world.isDay() && !this.world.isClient) {
-         float f = this.getBrightnessAtEyes();
-         BlockPos blockPos = this.getVehicle() instanceof BoatEntity ? (new BlockPos(this.getX(), (double)Math.round(this.getY()), this.getZ())).up() : new BlockPos(this.getX(), (double)Math.round(this.getY()), this.getZ());
-         if (f > 0.5F && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && this.world.isSkyVisible(blockPos)) {
-            return true;
-         }
-      }
-
-      return false;
-   }
-	 */
-
+	public boolean isUnderSky(PlayerEntity player) {
+      if (!player.world.isClient)
+    	  return false;
+      BlockPos blockPos = player.getVehicle() instanceof BoatEntity ? 
+     		 (new BlockPos(player.getX(), (double)Math.round(player.getY()), player.getZ())).up() : 
+     			 new BlockPos(player.getX(), (double)Math.round(player.getY()), player.getZ());
+      return player.world.isSkyVisible(blockPos);
+	}
+	
 	public void teleport(PlayerEntity player, ServerWorld world, BlockPos pos) {
+		if (!canTeleport(world, player, pos))
+			return;
 		if (!world.getRegistryKey().equals(player.world.getRegistryKey()))
 			player.moveToWorld(world);
 		player.teleport(pos.getX(), pos.getY(), pos.getZ());
+	}
+	
+	public boolean canTeleport(ServerWorld world, PlayerEntity player, BlockPos pos) {
+		return true;
 	}
 	
 	@Override
 	public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
 		if (world.isClient) 
 			return;
-		int cooldown = HearthStone.cooldownManager.get(entity.getUuidAsString(), this.stoneType).getCoolDown();
-		CompoundTag tag = new CompoundTag();
-		tag.putInt("cooldown", cooldown);
-		stack.setTag(tag);
+		this.cooldown = HearthStone.cooldownManager.get(entity.getUuidAsString(), this.stoneType).getCoolDown();
 	}
 
 	@Override
@@ -89,13 +89,7 @@ public class ItemHearthStoneBase extends Item {
 	@Override
 	@Environment(EnvType.CLIENT)
 	public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
-		CompoundTag tag = stack.getTag();
-		int cooldown;
-		if (tag == null)
-			cooldown = 0;
-		else 
-			cooldown = tag.getInt("cooldown");
-		if (cooldown > 0) {
+		if (this.cooldown > 0) {
 			int minutes = (int) (cooldown / 1200);
 			int seconds = (int) (cooldown / 20 - (minutes * 60));
 			tooltip.add(new TranslatableText("Cooldown: " + minutes + " minutes" + seconds + "seconds"));
