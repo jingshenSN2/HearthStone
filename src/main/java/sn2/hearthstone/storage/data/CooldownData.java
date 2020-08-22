@@ -2,16 +2,13 @@ package sn2.hearthstone.storage.data;
 
 public class CooldownData {
 	private int cooldown = 0;
-	private int stoneType;
 	
-	public CooldownData(int stoneType) {
+	public CooldownData() {
 		this.cooldown = 0;
-		this.stoneType = stoneType;
 	}
 	
-	public CooldownData(int cooldown, int stoneType) {
+	public CooldownData(int cooldown) {
 		this.cooldown = cooldown;
-		this.stoneType = stoneType;
 	}
 	
 	public void tick() {
@@ -21,9 +18,5 @@ public class CooldownData {
 
 	public int getCoolDown() {
 		return cooldown;
-	}
-	
-	public int getStoneType() {
-		return stoneType;
 	}
 }

@@ -68,7 +68,7 @@ public class CooldownManager implements ManagerBase<CooldownData>{
 		while (rs.next()) {
 			String uuid = rs.getString("UUID");
 			int stoneType = rs.getInt("STONETYPE");
-			cooldownTable.put(uuid, stoneType, new CooldownData(rs.getInt("COOLDOWN"), stoneType));
+			cooldownTable.put(uuid, stoneType, new CooldownData(rs.getInt("COOLDOWN")));
 		}
 	}
 

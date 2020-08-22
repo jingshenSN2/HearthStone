@@ -19,8 +19,8 @@ public class ItemHearthStoneMiner extends ItemHearthStoneBase{
 			return;
 		ServerPlayerEntity player = (ServerPlayerEntity) entity;
 		this.cooldown = HearthStone.cooldownManager.get(entity.getUuidAsString(), this.stoneType).getCoolDown();
-		PositionData posData = new PositionData(player.getUuidAsString(), player.getServerWorld().getRegistryKey(),
-			player.getBlockPos(), player.yaw, player.pitch, 0);
+		PositionData posData = new PositionData(player.getServerWorld().getRegistryKey(),
+			player.getBlockPos(), player.yaw, player.pitch);
 		HearthStone.posManager.put(player.getUuidAsString(), stoneType, posData);
 	}
 }

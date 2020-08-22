@@ -72,14 +72,14 @@ public class ItemHearthStoneBase extends Item {
 			ServerPlayerEntity player = (ServerPlayerEntity) user;
 			PositionData posData = null;
 			if (player.isSneaking()) {
-				posData = new PositionData(player.getUuidAsString(), player.getServerWorld().getRegistryKey(),
-					player.getBlockPos(), player.yaw, player.pitch, 0);
+				posData = new PositionData(player.getServerWorld().getRegistryKey(),
+					player.getBlockPos(), player.yaw, player.pitch);
 				HearthStone.posManager.put(player.getUuidAsString(), stoneType, posData);
 			} else {
 				posData = HearthStone.posManager.get(player.getUuidAsString(), stoneType);
 				if (posData != null) {
-					posData.teleport(player);
-					HearthStone.cooldownManager.put(player.getUuidAsString(), stoneType, new CooldownData(maxCooldown, stoneType));
+					HearthStone.posManager.teleport(player, posData);
+					HearthStone.cooldownManager.put(player.getUuidAsString(), stoneType, new CooldownData(maxCooldown));
 				}
 			}
 		}

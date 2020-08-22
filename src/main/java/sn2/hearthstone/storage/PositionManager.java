@@ -8,6 +8,7 @@ import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import com.google.common.collect.Table.Cell;
 
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
@@ -69,12 +70,11 @@ public class PositionManager implements ManagerBase<PositionData>{
 		while (rs.next()) {
 			String uuid = rs.getString("UUID");
 			int stoneType = rs.getInt("STONETYPE");
-			posTable.put(uuid, stoneType, new PositionData(uuid,
+			posTable.put(uuid, stoneType, new PositionData(
 					RegistryKey.of(Registry.DIMENSION, new Identifier(rs.getString("WORLDKEY"))), 
 					BlockPos.fromLong(rs.getLong("POSLON")), 
 					rs.getFloat("YAW"), 
-					rs.getFloat("PITCH"),
-					rs.getInt("STONETYPE")));
+					rs.getFloat("PITCH")));
 		}
 	}
 
@@ -102,6 +102,11 @@ public class PositionManager implements ManagerBase<PositionData>{
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public void teleport(ServerPlayerEntity player, PositionData posData) {
+		BlockPos pos = posData.getPos();
+		player.teleport(posData.getWorld(player), pos.getX(), pos.getY(), pos.getZ(), posData.getYaw(), posData.getPitch());
 	}
 
 }
