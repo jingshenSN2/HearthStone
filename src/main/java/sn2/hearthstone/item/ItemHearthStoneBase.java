@@ -22,18 +22,21 @@ import sn2.hearthstone.HearthStone;
 import sn2.hearthstone.storage.data.PositionData;
 
 public class ItemHearthStoneBase extends Item {
-	
+
 	private int maxCooldown;
 	private int maxDist;
-	protected int cooldown;
+	protected int cooldown = 0;
 	protected int stoneType;
+	
+	private int cast = -1;
+	private int maxCast = 5*20;
+	private BlockPos castPos;
 	
 	
 	public ItemHearthStoneBase(int maxCooldown, int stoneType, int maxDist) {
 		super(new Settings().maxCount(1).group(ItemGroup.TOOLS));
 		this.maxCooldown = maxCooldown;
 		this.maxDist = maxDist;
-		this.cooldown = 0;
 		this.stoneType = stoneType;
 	}
 	
@@ -57,6 +60,27 @@ public class ItemHearthStoneBase extends Item {
 	public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
 		if (world.isClient) 
 			return;
+		if (!(entity instanceof ServerPlayerEntity))
+			return;
+		ServerPlayerEntity player = (ServerPlayerEntity) entity;
+		if (this.cast > 0) {
+			if (!entity.getBlockPos().equals(castPos)) {
+				cast = -1;
+				player.sendMessage(new TranslatableText("casting canceled!"), true);
+			}
+			else {
+				cast--;
+				if (cast % 20 == 0) {
+					player.sendMessage(new TranslatableText(cast / 20 + "..."), true);
+				}
+			}
+		}
+		else if (this.cast == 0) {
+			PositionData posData = HearthStone.posManager.get(player.getUuidAsString(), stoneType);
+			this.teleport(player, posData.getWorld(player), posData.getPos());
+			HearthStone.cooldownManager.put(player.getUuidAsString(), stoneType, maxCooldown);
+			cast = -1;
+		}
 		this.cooldown = HearthStone.cooldownManager.get(entity.getUuidAsString(), this.stoneType);
 	}
 
@@ -70,12 +94,14 @@ public class ItemHearthStoneBase extends Item {
 				posData = new PositionData(player.getServerWorld().getRegistryKey(),
 					player.getBlockPos(), player.yaw, player.pitch);
 				HearthStone.posManager.put(player.getUuidAsString(), stoneType, posData);
+				player.sendMessage(new TranslatableText("record position updated!"), true);
 			}
-			else {
+			else if (this.cooldown == 0){
 				posData = HearthStone.posManager.get(player.getUuidAsString(), stoneType);
 				if (posData != null && canTeleport(posData.getWorld(player), player, posData.getPos())) {
-					this.teleport(player, posData.getWorld(player), posData.getPos());
-					HearthStone.cooldownManager.put(player.getUuidAsString(), stoneType, maxCooldown);
+					player.sendMessage(new TranslatableText("start casting, don't move!"), true);
+					this.cast = maxCast;
+					this.castPos = player.getBlockPos();
 				}
 			}
 		}
