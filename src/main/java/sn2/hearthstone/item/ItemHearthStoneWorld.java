@@ -9,18 +9,14 @@ import net.minecraft.world.World;
 public class ItemHearthStoneWorld extends ItemHearthStoneBase{
 
 	private RegistryKey<World> worldKey;
-	private int maxDist;
-	private BlockPos recordPos;
 	
-	public ItemHearthStoneWorld(int maxCooldown, int stoneType, RegistryKey<World> worldKey, int maxDist) {
-		super(maxCooldown, stoneType);
+	public ItemHearthStoneWorld(int maxCooldown, int stoneType, int maxDist, RegistryKey<World> worldKey) {
+		super(maxCooldown, stoneType, maxDist);
 		this.worldKey = worldKey;
-		this.maxDist = maxDist;
 	}
-	
 	
 	@Override
 	public boolean canTeleport(ServerWorld world, PlayerEntity player, BlockPos pos) {
-		return this.worldKey == world.getRegistryKey() && (recordPos.isWithinDistance(pos, this.maxDist) || this.maxDist == -1);
+		return this.worldKey == world.getRegistryKey();
 	}
 }

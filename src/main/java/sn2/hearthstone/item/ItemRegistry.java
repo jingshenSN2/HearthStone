@@ -9,12 +9,12 @@ import sn2.hearthstone.HearthStone;
 public class ItemRegistry {
 
 	private static int minTick = 20*60;
-	public static final Item SIMPLE_OVERWORLD_HEARTHSTONE = new ItemHearthStoneWorld(30 * minTick, 0, World.OVERWORLD, 500);
-	public static final Item SIMPLE_NETHER_HEARTHSTONE = new ItemHearthStoneWorld(30 * minTick, 1, World.NETHER, 500);
-	public static final Item SIMPLE_END_HEARTHSTONE = new ItemHearthStoneWorld(30 * minTick, 2, World.END, 500);
-	public static final Item OVERWORLD_HEARTHSTONE = new ItemHearthStoneWorld(20 * minTick, 3, World.OVERWORLD, -1);
-	public static final Item NETHER_HEARTHSTONE = new ItemHearthStoneWorld(20 * minTick, 4, World.NETHER, -1);
-	public static final Item END_HEARTHSTONE = new ItemHearthStoneWorld(20 * minTick, 5, World.END, -1);
+	public static final Item SIMPLE_OVERWORLD_HEARTHSTONE = new ItemHearthStoneWorld(30 * minTick, 0, 500, World.OVERWORLD);
+	public static final Item SIMPLE_NETHER_HEARTHSTONE = new ItemHearthStoneWorld(30 * minTick, 1, 500, World.NETHER);
+	public static final Item SIMPLE_END_HEARTHSTONE = new ItemHearthStoneWorld(30 * minTick, 2, 500, World.END);
+	public static final Item OVERWORLD_HEARTHSTONE = new ItemHearthStoneWorld(20 * minTick, 3, -1, World.OVERWORLD);
+	public static final Item NETHER_HEARTHSTONE = new ItemHearthStoneWorld(20 * minTick, 4, -1, World.NETHER);
+	public static final Item END_HEARTHSTONE = new ItemHearthStoneWorld(20 * minTick, 5, -1, World.END);
 	public static final Item MINER_HEARTHSTONE = new ItemHearthStoneMiner(20 * minTick, 6);
 
 	public static void init() {

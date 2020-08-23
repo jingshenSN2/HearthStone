@@ -7,7 +7,6 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -20,30 +19,22 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import sn2.hearthstone.HearthStone;
-import sn2.hearthstone.storage.data.CooldownData;
 import sn2.hearthstone.storage.data.PositionData;
 
 public class ItemHearthStoneBase extends Item {
 	
 	private int maxCooldown;
+	private int maxDist;
 	protected int cooldown;
 	protected int stoneType;
 	
 	
-	public ItemHearthStoneBase(int maxCooldown, int stoneType) {
+	public ItemHearthStoneBase(int maxCooldown, int stoneType, int maxDist) {
 		super(new Settings().maxCount(1).group(ItemGroup.TOOLS));
 		this.maxCooldown = maxCooldown;
+		this.maxDist = maxDist;
 		this.cooldown = 0;
 		this.stoneType = stoneType;
-	}
-	
-	public boolean isUnderSky(PlayerEntity player) {
-      if (!player.world.isClient)
-    	  return false;
-      BlockPos blockPos = player.getVehicle() instanceof BoatEntity ? 
-     		 (new BlockPos(player.getX(), (double)Math.round(player.getY()), player.getZ())).up() : 
-     			 new BlockPos(player.getX(), (double)Math.round(player.getY()), player.getZ());
-      return player.world.isSkyVisible(blockPos);
 	}
 	
 	public void teleport(PlayerEntity player, ServerWorld world, BlockPos pos) {
@@ -55,6 +46,10 @@ public class ItemHearthStoneBase extends Item {
 	}
 	
 	public boolean canTeleport(ServerWorld world, PlayerEntity player, BlockPos pos) {
+		return pos.isWithinDistance(player.getPos(), this.maxDist) || this.maxDist == -1;
+	}
+	
+	public boolean canRecord(ServerWorld world) {
 		return true;
 	}
 	
@@ -62,7 +57,7 @@ public class ItemHearthStoneBase extends Item {
 	public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
 		if (world.isClient) 
 			return;
-		this.cooldown = HearthStone.cooldownManager.get(entity.getUuidAsString(), this.stoneType).getCoolDown();
+		this.cooldown = HearthStone.cooldownManager.get(entity.getUuidAsString(), this.stoneType);
 	}
 
 	@Override
@@ -71,15 +66,16 @@ public class ItemHearthStoneBase extends Item {
 		if (!world.isClient) {
 			ServerPlayerEntity player = (ServerPlayerEntity) user;
 			PositionData posData = null;
-			if (player.isSneaking()) {
+			if (player.isSneaking() && canRecord((ServerWorld)world)) {
 				posData = new PositionData(player.getServerWorld().getRegistryKey(),
 					player.getBlockPos(), player.yaw, player.pitch);
 				HearthStone.posManager.put(player.getUuidAsString(), stoneType, posData);
-			} else {
+			}
+			else {
 				posData = HearthStone.posManager.get(player.getUuidAsString(), stoneType);
-				if (posData != null) {
-					HearthStone.posManager.teleport(player, posData);
-					HearthStone.cooldownManager.put(player.getUuidAsString(), stoneType, new CooldownData(maxCooldown));
+				if (posData != null && canTeleport(posData.getWorld(player), player, posData.getPos())) {
+					this.teleport(player, posData.getWorld(player), posData.getPos());
+					HearthStone.cooldownManager.put(player.getUuidAsString(), stoneType, maxCooldown);
 				}
 			}
 		}

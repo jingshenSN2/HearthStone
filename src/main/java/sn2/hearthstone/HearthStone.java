@@ -37,7 +37,7 @@ public class HearthStone implements ModInitializer {
 			posManager = new PositionManager(sql);
 			cooldownManager = new CooldownManager(sql);
 		});
-		ServerTickEvents.END_SERVER_TICK.register(server -> {
+		ServerTickEvents.START_SERVER_TICK.register(server -> {
 			cooldownManager.tick();
 		});
 		ServerLifecycleEvents.SERVER_STOPPING.register(server -> { 
